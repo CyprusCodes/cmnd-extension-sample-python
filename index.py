@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 import uvicorn
-from cmnd.get_tools import get_tools
-from cmnd.run_tool import post_run_tool
+from cmnd.constants.get_tools import get_tools
+from cmnd.constants.run_tool import post_run_tool
 
 app = FastAPI()
 
