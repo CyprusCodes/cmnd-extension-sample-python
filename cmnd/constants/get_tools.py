@@ -1,16 +1,13 @@
 from .tools import tools
 
 async def get_tools():
-    tools_mapped = [
-        {
+    tools_info = []
+    for tool in tools:
+        tool_data = {
             "name": tool["name"],
             "description": tool["description"],
-            "jsonSchema": tool["parameters"],
-            "isDangerous": tool["dangerous"],
-            "functionType": tool["functionType"],
-            "isLongRunningTool": tool["isLongRunningTool"],
-            "rerun": tool["rerun"],
-            "rerunWithDifferentParameters": tool["rerunWithDifferentParameters"],
-        } for tool in tools
-    ]
-    return {"tools": tools_mapped}
+            # Use the Pydantic model's .schema() method to serialize its schema to JSON, if needed
+            "parameters": tool["parameters"].schema() if hasattr(tool["parameters"], 'schema') else {}
+        }
+        tools_info.append(tool_data)
+    return {"tools": tools_info}
