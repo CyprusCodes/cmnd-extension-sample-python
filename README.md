@@ -38,9 +38,10 @@ In this code, there is tools attribute, where you pass the tools that you have c
 
 ### Create Tools Example 
 
+```python
 from openai import OpenAI
 client = OpenAI()
- 
+
 assistant = client.beta.assistants.create(
   instructions="You are a weather bot. Use the provided functions to answer questions.",
   model="gpt-4-turbo",
@@ -68,3 +69,4 @@ assistant = client.beta.assistants.create(
       }
     }
   }
+```
