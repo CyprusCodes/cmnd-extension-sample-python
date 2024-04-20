@@ -17,3 +17,7 @@
 
 ### Assistants:
 computer programs that serve as virtual assistants and communicate with users through text-based interfaces on websites, social media platforms and messaging apps. These chatbots can assist customers, respond to inquiries or start a discussion with them. By equiping the asssitant with tools, the asssitant will be able to perform tasks that the LLM cannot do, and give it's result to the LLM to give you the final answer.
+
+
+
+![src/assistants.png](src/assistants.png)
