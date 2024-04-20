@@ -70,3 +70,44 @@ assistant = client.beta.assistants.create(
     }
   }
 ```
+
+## Getting Started: 
+This repository hosts a FastAPI and Flask applications, both designed to execute various server-side tools  and add them to CMND.ai dynamically based on requests. It allows users to query tool information and run specific tools by passing parameters.
+
+1. Clone the repository:
+```bash git clone git@github.com:CyprusCodes/cmnd-extension-sample-python.git``` 
+
+2. Install the requirements
+```bash pip install requirements.txt```
+
+3. Navigate to the cloned directory:
+```bash cmnd-extension-sample-python```
+
+4. Determine whether you are using FastAPI or Flask, and navigate to the chosen directory.
+
+5. Navigate to the tools file
+
+6. Within the tool.py, create your tool definition by specifying its name, description, parameters, and the runCmd)Within the tool.py, create your tool definition by specifying its name, description, parameters, and the runCmd, which is the function itself, below is an example of function definition.
+
+```python
+def run_json_file_reader(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            data = json.load(file)
+            return json.dumps(data)
+    except Exception as error:
+        return f"An error occurred while reading the file: {str(error)}"
+ 
+tools = [
+    {
+        "name": "json_file_reader",
+        "description": "Reads JSON file content",
+        "parameters": GetFilePathSchema,
+        "runCmd": run_json_file_reader
+    }
+]
+````
+7. Run your app (server):
+``` bash
+python3 main.py
+```
