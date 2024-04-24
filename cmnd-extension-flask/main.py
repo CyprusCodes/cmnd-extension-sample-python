@@ -1,4 +1,6 @@
-from flask import Flask, request, jsonify, abort
+from flask import Flask, request, jsonify, abort, Response
+import json
+from collections import OrderedDict
 import os
 from dotenv import load_dotenv
 from tools import tools, product_finder, weather_from_location, file_reader
@@ -11,18 +13,21 @@ app = Flask(__name__)
 @app.route("/cmnd-tools", methods=['GET'])
 def cmnd_tools_endpoint():
     tools_response = [
-        {
-            "name": tool["name"],
-            "description": tool["description"],
-            "jsonSchema": tool["parameters"],
-            "isDangerous": tool.get("isDangerous", False),
-            "functionType": tool["functionType"],
-            "isLongRunningTool": tool.get("isLongRunningTool", False),
-            "rerun": tool["rerun"],
-            "rerunWithDifferentParameters": tool["rerunWithDifferentParameters"],
-        } for tool in tools
+    OrderedDict([
+        ("name", tool["name"]),
+        ("description", tool["description"]),
+        ("jsonSchema", tool["parameters"]),
+        ("isDangerous", tool.get("isDangerous", False)),
+        ("functionType", tool["functionType"]),
+        ("rerun", tool["rerun"]),
+        ("rerunWithDifferentParameters", tool["rerunWithDifferentParameters"]),
+    ]) for tool in tools
     ]
-    return jsonify({"tools": tools_response})
+    json_data = json.dumps({"tools": tools_response})
+
+    response_data = Response(json_data, content_type="application/json")
+
+    return response_data
 
 @app.route("/run-cmnd-tool", methods=['POST'])
 def run_cmnd_tool_endpoint():

@@ -35,8 +35,8 @@ def custom_json_schema(model):
     schema = model.schema()
     properties_formatted = {
         k: {
-            "title": v.get("title"),
-            "type": v.get("type")
+            "type": v.get("type"),
+            "title": v.get("title")
         } for k, v in schema["properties"].items()
     }
 

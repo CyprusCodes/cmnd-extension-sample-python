@@ -20,7 +20,6 @@ def cmnd_tools_endpoint():
             "jsonSchema": tool["parameters"],
             "isDangerous": tool.get("isDangerous", False),
             "functionType": tool["functionType"],
-            "isLongRunningTool": tool.get("isLongRunningTool", False),
             "rerun": tool["rerun"],
             "rerunWithDifferentParameters": tool["rerunWithDifferentParameters"],
         } for tool in tools
