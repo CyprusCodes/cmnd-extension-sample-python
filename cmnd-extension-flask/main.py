@@ -1,30 +1,42 @@
-from flask import Flask, request, jsonify
-from cmnd.constants.get_tools import get_tools
-from cmnd.constants.run_tools import post_run_tool
+from flask import Flask, request, jsonify, abort
+import os
+from dotenv import load_dotenv
+from tools import tools, product_finder, weather_from_location, file_reader
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
 
-@app.route("/cmnd-tools", methods=["GET"])
+@app.route("/cmnd-tools", methods=['GET'])
 def cmnd_tools_endpoint():
-    tools = get_tools()
-    return jsonify(tools)
+    tools_response = [
+        {
+            "name": tool["name"],
+            "description": tool["description"],
+            "jsonSchema": tool["parameters"],
+            "isDangerous": tool.get("isDangerous", False),
+            "functionType": tool["functionType"],
+            "isLongRunningTool": tool.get("isLongRunningTool", False),
+            "rerun": tool["rerun"],
+            "rerunWithDifferentParameters": tool["rerunWithDifferentParameters"],
+        } for tool in tools
+    ]
+    return jsonify({"tools": tools_response})
 
-@app.route("/run-cmnd-tool", methods=["POST"])
+@app.route("/run-cmnd-tool", methods=['POST'])
 def run_cmnd_tool_endpoint():
+    data = request.json
+    tool_name = data.get('toolName')
+    props = data.get('props', {})
+    tool = next((t for t in tools if t['name'] == tool_name), None)
+    if not tool:
+        abort(404, description="Tool not found")
     try:
-        request_data = request.json
-        tool_name = request_data.get('toolName')
-        props = request_data.get('props', {})
-
-        if not tool_name:
-            raise ValueError("Tool name is required")
-
-        result = post_run_tool(tool_name, props)
-        return jsonify({"result": result})
-    except ValueError as ve:
-        return jsonify({"detail": str(ve)}), 400
+        result = tool["runCmd"](**props)
+        return jsonify(result)
     except Exception as e:
-        return jsonify({"detail": str(e)}), 500
+        abort(500, description=str(e))
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5222, debug=True)
+    app.run(host="127.0.0.1", port=8888, debug=True)
