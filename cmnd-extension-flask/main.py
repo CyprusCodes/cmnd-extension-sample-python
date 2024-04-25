@@ -1,12 +1,15 @@
 from flask import Flask, request, jsonify, abort
 import os
 from dotenv import load_dotenv
+from flask_cors import CORS
 from tools import tools, product_finder, weather_from_location, file_reader
 
 # Load environment variables
 load_dotenv()
 
+
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/cmnd-tools", methods=['GET'])
 def cmnd_tools_endpoint():
@@ -39,4 +42,4 @@ def run_cmnd_tool_endpoint():
         abort(500, description=str(e))
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=8888, debug=True)
+    app.run(host="0.0.0.0", port=8888, debug=True)
