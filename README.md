@@ -117,6 +117,6 @@ tools = [
 ``` bash
 python3 main.py
 ```
-8. Any API Keys needed for your own tools they should be in your .env file
+8. Any API keys required for your tools should be stored in your .env file.
 
-The rest is about endpints and some functions to help this endpoints, so you'r not going to play with the main in any case, you will only modify the tools.py where you will first add your tools schema definition, tool implementations, and at the end the tool configration
+The rest pertains to endpoints and various functions that support these endpoints. Therefore, you will not need to modify the main.py in any case. Instead, you will only make changes to the tools.py file, where you will initially add your tool's schema definition, implement the tool, and finally configure the tool settings.
