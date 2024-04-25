@@ -93,23 +93,35 @@ cmnd-extension-sample-python
 
 8. Navigate to the tools file
 
-9. Within the tool.py, create your tool definition by specifying its name, description, parameters, and the runCmd)Within the tool.py, create your tool definition by specifying its name, description, parameters, and the runCmd, which is the function itself, below is an example of function definition.
+9. Within the tool.py, create your tool definition by first defining data validation schema using Pydentic, then create your tools implementation, and at the end create your tool configuration and metadata
 
 ```python
-def run_json_file_reader(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            data = json.load(file)
-            return json.dumps(data)
-    except Exception as error:
-        return f"An error occurred while reading the file: {str(error)}"
- 
-tools = [
-    {
-        "name": "json_file_reader",
-        "description": "Reads JSON file content",
-        "parameters": GetFilePathSchema,
-        "runCmd": run_json_file_reader
+# Define data validation schemas using Pydantic for different functionalities
+class WeatherCitySchema(BaseModel):
+    city: str = Field(..., title="City", description="City name required"
+
+# Define your tools implementation
+async def weather_from_location(city: str):
+    api_key = os.getenv('WEATHER_API_KEY')
+    if not api_key:
+        raise ValueError("API key for weather data is not set in environment variables.")
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}"
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
+        return response.json()
+
+# Define your tools configuration and metadata
+tool = [
+{
+        "name": "weather_from_location",
+        "description": "Gets the weather details from a given city name",
+        "parameters": custom_json_schema(WeatherCitySchema),
+        "runCmd": weather_from_location,
+        "isDangerous": False,
+        "functionType": "backend",
+        "isLongRunningTool": False,
+        "rerun": True,
+        "rerunWithDifferentParameters": True
     }
 ]
 ````
