@@ -120,3 +120,7 @@ python3 main.py
 8. Any API keys required for your tools should be stored in your .env file.
 
 The rest pertains to endpoints and various functions that support these endpoints. Therefore, you will not need to modify the main.py in any case. Instead, you will only make changes to the tools.py file, where you will initially add your tool's schema definition, implement the tool, and finally configure the tool settings.
+
+# Run Your Server Publicly using ngrok 
+
+1. Create ngrok account and setup ngrok on your own machine [ngrok accounts and setup](https://ngrok.com/docs/getting-started/?os=macos)
