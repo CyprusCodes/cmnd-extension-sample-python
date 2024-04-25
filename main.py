@@ -3,10 +3,10 @@ from fastapi.responses import JSONResponse
 from starlette.requests import Request
 import uvicorn
 import os
-from dotenv import load_dotenv
 from tools import tools
 
-# Load environment variables
+from dotenv import load_dotenv
+
 load_dotenv()
 
 app = FastAPI()
