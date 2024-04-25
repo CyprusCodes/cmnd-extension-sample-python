@@ -75,19 +75,25 @@ assistant = client.beta.assistants.create(
 This repository hosts a FastAPI and Flask applications, both designed to execute various server-side tools  and add them to CMND.ai dynamically based on requests. It allows users to query tool information and run specific tools by passing parameters.
 
 1. Clone the repository:
-```bash git clone git@github.com:CyprusCodes/cmnd-extension-sample-python.git``` 
+```bash
+git clone git@github.com:CyprusCodes/cmnd-extension-sample-python.git
+``` 
 
-2. Install the requirements
-```bash pip install requirements.txt```
+3. Install the requirements
+```bash
+pip install requirements.txt
+```
 
-3. Navigate to the cloned directory:
-```bash cmnd-extension-sample-python```
+5. Navigate to the cloned directory:
+```bash
+cmnd-extension-sample-python
+```
 
-4. Determine whether you are using FastAPI or Flask, and navigate to the chosen directory.
+7. Determine whether you are using FastAPI or Flask, and navigate to the chosen directory.
 
-5. Navigate to the tools file
+8. Navigate to the tools file
 
-6. Within the tool.py, create your tool definition by specifying its name, description, parameters, and the runCmd)Within the tool.py, create your tool definition by specifying its name, description, parameters, and the runCmd, which is the function itself, below is an example of function definition.
+9. Within the tool.py, create your tool definition by specifying its name, description, parameters, and the runCmd)Within the tool.py, create your tool definition by specifying its name, description, parameters, and the runCmd, which is the function itself, below is an example of function definition.
 
 ```python
 def run_json_file_reader(file_path):
@@ -111,3 +117,6 @@ tools = [
 ``` bash
 python3 main.py
 ```
+8. Any API Keys needed for your own tools they should be in your .env file
+
+The rest is about endpints and some functions to help this endpoints, so you'r not going to play with the main in any case, you will only modify the tools.py where you will first add your tools schema definition, tool implementations, and at the end the tool configration
