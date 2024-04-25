@@ -4,5 +4,4 @@ httpx
 pydantic
 flask
 requests
-json
 urllib
