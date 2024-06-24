@@ -37,7 +37,7 @@ def run_cmnd_tool_endpoint():
     try:
         conversation_id = props.pop("conversationId", None)
         chatbot_conversation_id = props.pop("chatbotConversationId", None)
-        result = tool["runCmd"](conversationId=conversation_id, chatbotConversationId=chatbot_conversation_id, **props)
+        result = tool["runCmd"](**props)
         return jsonify(result)
     except Exception as e:
         abort(500, description=str(e))
