@@ -2,11 +2,10 @@ from flask import Flask, request, jsonify, abort
 import os
 from dotenv import load_dotenv
 from flask_cors import CORS
-from tools import tools, product_finder, weather_from_location, file_reader
+from tools import tools
 
 # Load environment variables
 load_dotenv()
-
 
 app = Flask(__name__)
 CORS(app)
@@ -36,7 +35,10 @@ def run_cmnd_tool_endpoint():
     if not tool:
         abort(404, description="Tool not found")
     try:
-        result = tool["runCmd"](**props)
+        # Extract and then remove the conversation IDs from props before passing them to the tool command
+        conversation_id = props.pop("conversationId", None)
+        chatbot_conversation_id = props.pop("chatbotConversationId", None)
+        result = tool["runCmd"](conversationId=conversation_id, chatbotConversationId=chatbot_conversation_id, **props)
         return jsonify(result)
     except Exception as e:
         abort(500, description=str(e))
