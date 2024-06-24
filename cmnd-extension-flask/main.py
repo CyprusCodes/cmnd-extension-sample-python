@@ -35,7 +35,6 @@ def run_cmnd_tool_endpoint():
     if not tool:
         abort(404, description="Tool not found")
     try:
-        # Extract and then remove the conversation IDs from props before passing them to the tool command
         conversation_id = props.pop("conversationId", None)
         chatbot_conversation_id = props.pop("chatbotConversationId", None)
         result = tool["runCmd"](conversationId=conversation_id, chatbotConversationId=chatbot_conversation_id, **props)
