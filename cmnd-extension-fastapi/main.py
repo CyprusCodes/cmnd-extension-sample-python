@@ -36,10 +36,15 @@ async def run_cmnd_tool_endpoint(request: Request):
     if not tool:
         raise HTTPException(status_code=404, detail="Tool not found")
     try:
+        conversation_id = props["conversationId"]
+        chatbot_conversation_id = props["chatbotConversationId"]
+        del props["conversationId"] # not sure about this
+        del props["chatbotConversationId"] # not sure about this
         result = await tool["runCmd"](**props)
         return JSONResponse(content=result, media_type="application/json")
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8888)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
