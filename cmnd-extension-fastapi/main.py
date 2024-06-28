@@ -40,8 +40,8 @@ async def run_cmnd_tool_endpoint(request: Request):
     try:
         conversation_id = props["conversationId"]
         chatbot_conversation_id = props["chatbotConversationId"]
-        del props["conversationId"] # not sure about this
-        del props["chatbotConversationId"] # not sure about this
+        del props["conversationId"] 
+        del props["chatbotConversationId"] 
         result = await tool["runCmd"](**props)
         return JSONResponse(content=result, media_type="application/json")
     except Exception as e:
