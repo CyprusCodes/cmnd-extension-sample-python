@@ -34,6 +34,8 @@ async def run_cmnd_tool_endpoint(request: Request):
     data = await request.json()
     tool_name = data.get('toolName')
     props = data.get('props', {})
+    memory = data.get('memory')
+    
     tool = next((t for t in tools if t['name'] == tool_name), None)
     if not tool:
         raise HTTPException(status_code=404, detail="Tool not found")
@@ -42,11 +44,15 @@ async def run_cmnd_tool_endpoint(request: Request):
         chatbot_conversation_id = props["chatbotConversationId"]
         del props["conversationId"] 
         del props["chatbotConversationId"] 
-        result = await tool["runCmd"](**props)
+        result = await tool["runCmd"](**props, memory=memory)
         return JSONResponse(content=result, media_type="application/json")
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8001)
+
+
+def names():
+    return [tool["name"] for tool in tools]
