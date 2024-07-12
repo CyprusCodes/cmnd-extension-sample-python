@@ -11,11 +11,15 @@ class WeatherCitySchema(BaseModel):
 class FilePathSchema(BaseModel):
     filePath: str = Field(..., title="Filepath", description="File path required")
 
-async def product_finder(product: str):
+async def product_finder(product: str, memory: dict):
     url = f"https://dummyjson.com/products/search?q={product}"
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
-        return response.json()
+        memory["name"] = "Ahmad"
+        return{
+            "responseString": f"{response.json()}"
+            "memory": memory
+        }
 
 async def weather_from_location(city: str):
     api_key = os.getenv('WEATHER_API_KEY')
