@@ -35,6 +35,7 @@ async def run_cmnd_tool_endpoint(request: Request):
     tool_name = data.get('toolName')
     props = data.get('props', {})
     memory = data.get('memory')
+    print(f"once arrived {memory}")
     
     tool = next((t for t in tools if t['name'] == tool_name), None)
     if not tool:
@@ -44,7 +45,11 @@ async def run_cmnd_tool_endpoint(request: Request):
         chatbot_conversation_id = props["chatbotConversationId"]
         del props["conversationId"] 
         del props["chatbotConversationId"] 
+        print(f"before passing {type(memory)}")
         result = await tool["runCmd"](**props, memory=memory)
+        print(f"memory value came from cmnd-server: {memory}")
+        print(f"after passing {type(memory)}")
+        print(f"content: {result}")
         return JSONResponse(content=result, media_type="application/json")
     except Exception as e:
         print(e)
@@ -52,7 +57,3 @@ async def run_cmnd_tool_endpoint(request: Request):
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8001)
-
-
-def names():
-    return [tool["name"] for tool in tools]

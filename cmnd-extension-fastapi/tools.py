@@ -17,7 +17,7 @@ async def product_finder(product: str, memory: dict):
         response = await client.get(url)
         memory["name"] = "Ahmad"
         return{
-            "responseString": f"{response.json()}"
+            "responseString": f"{response.json()}",
             "memory": memory
         }
 
