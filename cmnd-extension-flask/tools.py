@@ -22,7 +22,17 @@ def weather_from_location(city: str):
         raise ValueError("API key for weather data is not set in environment variables.")
     url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}"
     response = requests.get(url)
-    return response.json()
+
+    # an example of how we use the memory object to store the weather data
+    memory["weather"] = response.json()
+    return {
+        "responseString": "Success",
+        "memory": memory
+    }
+    """
+    to use the weather data in the memory object, you can access it like this:
+    weather = memory.get("weather")
+    """
 
 def file_reader(filePath: str):
     try:
