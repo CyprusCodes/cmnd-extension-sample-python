@@ -35,20 +35,24 @@ async def run_cmnd_tool_endpoint(request: Request):
     tool_name = data.get('toolName')
     props = data.get('props', {})
     memory = data.get('memory')
-    print(f"once arrived {memory}")
     
     tool = next((t for t in tools if t['name'] == tool_name), None)
     if not tool:
         raise HTTPException(status_code=404, detail="Tool not found")
+    
     try:
-        conversation_id = props["conversationId"]
-        chatbot_conversation_id = props["chatbotConversationId"]
-        del props["conversationId"] 
-        del props["chatbotConversationId"] 
-        print(f"before passing {type(memory)}")
-        result = await tool["runCmd"](**props, memory=memory)
-        print(f"memory value came from cmnd-server: {memory}")
-        print(f"after passing {type(memory)}")
+        props.pop("conversationId", None)
+        props.pop("chatbotConversationId", None)
+        
+        # Check if the tool's runCmd function expects a 'memory' parameter
+        from inspect import signature
+        run_cmd_params = signature(tool["runCmd"]).parameters
+        
+        if 'memory' in run_cmd_params:
+            result = await tool["runCmd"](**props, memory=memory)
+        else:
+            result = await tool["runCmd"](**props)
+        
         print(f"content: {result}")
         return JSONResponse(content=result, media_type="application/json")
     except Exception as e:
