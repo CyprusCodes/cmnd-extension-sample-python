@@ -3,7 +3,8 @@ import os
 from dotenv import load_dotenv
 from flask_cors import CORS
 from tools import tools
-import traceback2 as traceback 
+import traceback
+from inspect import signature
 
 # Load environment variables
 load_dotenv()
@@ -40,10 +41,15 @@ def run_cmnd_tool_endpoint():
         if not tool:
             abort(404, description="Tool not found")
         
-        conversation_id = props.pop("conversationId", None)
-        chatbot_conversation_id = props.pop("chatbotConversationId", None)
+        props.pop("conversationId", None)
+        props.pop("chatbotConversationId", None)
         
-        result = tool["runCmd"](**props, memory=memory)
+        run_cmd_params = signature(tool["runCmd"]).parameters
+        
+        if 'memory' in run_cmd_params:
+            result = tool["runCmd"](**props, memory=memory)
+        else:
+            result = tool["runCmd"](**props)
         
         return jsonify(result)
     except Exception as e:
