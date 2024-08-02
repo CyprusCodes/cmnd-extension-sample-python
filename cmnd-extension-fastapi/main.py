@@ -5,6 +5,7 @@ import uvicorn
 import os
 from dotenv import load_dotenv
 from tools import tools
+from inspect import signature
 
 # Load environment variables
 load_dotenv()
@@ -44,8 +45,6 @@ async def run_cmnd_tool_endpoint(request: Request):
         props.pop("conversationId", None)
         props.pop("chatbotConversationId", None)
         
-        # Check if the tool's runCmd function expects a 'memory' parameter
-        from inspect import signature
         run_cmd_params = signature(tool["runCmd"]).parameters
         
         if 'memory' in run_cmd_params:
