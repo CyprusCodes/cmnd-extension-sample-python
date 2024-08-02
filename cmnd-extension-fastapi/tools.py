@@ -3,41 +3,43 @@ from pydantic import BaseModel, Field
 import httpx
 
 class ProductFinderSchema(BaseModel):
-    product: str = Field(..., title="Product", description="Product name required")
+    product_name: str = Field(..., title="Product Name", description="The name of the product to find details for")
 
-class WeatherCitySchema(BaseModel):
-    city: str = Field(..., title="City", description="City name required")
+class PutUsernameSchema(BaseModel):
+    username: str = Field(..., title="Username", description="The username to get details for")
 
-class FilePathSchema(BaseModel):
-    filePath: str = Field(..., title="Filepath", description="File path required")
+class EchoUsernameSchema(BaseModel):
+    pass
 
-async def product_finder(product: str, memory: dict):
-    url = f"https://dummyjson.com/products/search?q={product}"
+
+# an example of a simple tool that returns the weather details of a city
+async def product_finder(product_name: str):
+    url = f"https://dummyjson.com/products/search?q={product_name}"
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
-        memory["name"] = "Ahmad"
-        return{
-            "responseString": f"{response.json()}",
-            "memory": memory
+        return response.json()   
+
+# an example of a tool that uses the CMND's memory object feature to store some data
+async def put_username(username: str, memory:dict):
+    memory['username'] = username
+    return {
+        "responseString": f"Username {username} has been saved to memory",
+        "memory": memory
+    }
+
+# an example of a tool that uses the CMND's memory object feature to retrive some data
+async def echo_username(memory:dict):
+    username = memory.get('username')
+    if not username:
+        return {
+            "responseString": "No username has been found in the memory"
         }
-
-async def weather_from_location(city: str):
-    api_key = os.getenv('WEATHER_API_KEY')
-    if not api_key:
-        raise ValueError("API key for weather data is not set in environment variables.")
-    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}"
-    async with httpx.AsyncClient() as client:
-        response = await client.get(url)
-        return response.json()
+    return {
+        "responseString": f"The username found in memory is {username}"
+    }
 
 
-async def file_reader(filePath: str):
-    try:
-        with open(filePath, 'r') as file:
-            return file.read()
-    except Exception as e:
-        return str(e)
-
+# DON'T TOUCH THIS FUNCTION FOR ANY REASON
 def custom_json_schema(model):
     schema = model.schema()
     properties_formatted = {
@@ -67,10 +69,10 @@ tools = [
         "rerunWithDifferentParameters": True
     },
     {
-        "name": "weather_from_location",
-        "description": "Gets the weather details from a given city name",
-        "parameters": custom_json_schema(WeatherCitySchema),
-        "runCmd": weather_from_location,
+        "name": "put_username",
+        "description": "saves the username to the memory",
+        "parameters": custom_json_schema(PutUsernameSchema),
+        "runCmd": put_username,
         "isDangerous": False,
         "functionType": "backend",
         "isLongRunningTool": False,
@@ -78,10 +80,10 @@ tools = [
         "rerunWithDifferentParameters": True
     },
     {
-        "name": "file_reader",
-        "description": "Returns the contents of a file given its filepath",
-        "parameters": custom_json_schema(FilePathSchema),
-        "runCmd": file_reader,
+        "name": "echo_username",
+        "description": "echos the username saved in the memory",
+        "parameters": custom_json_schema(EchoUsernameSchema),
+        "runCmd": echo_username,
         "isDangerous": False,
         "functionType": "backend",
         "isLongRunningTool": False,
