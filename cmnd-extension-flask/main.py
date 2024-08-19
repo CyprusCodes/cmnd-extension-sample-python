@@ -26,6 +26,7 @@ def cmnd_tools_endpoint():
             "postCallPrompt": tool.get("postCallPrompt"),
             "rerun": tool["rerun"],
             "rerunWithDifferentParameters": tool["rerunWithDifferentParameters"],
+            "prerequisites": tool.get("prerequisites"),
         } for tool in tools
     ]
     return jsonify({"tools": tools_response})
