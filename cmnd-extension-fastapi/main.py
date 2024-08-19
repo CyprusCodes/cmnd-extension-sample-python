@@ -6,7 +6,6 @@ import os
 from dotenv import load_dotenv
 from tools import tools
 from inspect import signature
-
 # Load environment variables
 load_dotenv()
 
@@ -26,6 +25,7 @@ def cmnd_tools_endpoint():
             "postCallPrompt": tool.get("postCallPrompt"),
             "rerun": tool["rerun"],
             "rerunWithDifferentParameters": tool["rerunWithDifferentParameters"],
+            "prerequisites": tool["prerequisites"]
         } for tool in tools
     ]
     return JSONResponse(content={"tools": tools_response})
