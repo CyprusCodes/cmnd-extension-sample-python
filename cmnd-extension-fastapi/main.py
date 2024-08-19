@@ -6,7 +6,6 @@ import os
 from dotenv import load_dotenv
 from tools import tools
 from inspect import signature
-from pprint import pprint
 # Load environment variables
 load_dotenv()
 
@@ -29,7 +28,6 @@ def cmnd_tools_endpoint():
             "prerequisites": tool["prerequisites"]
         } for tool in tools
     ]
-    pprint(tools_response)
     return JSONResponse(content={"tools": tools_response})
 
 @app.post("/run-cmnd-tool")
