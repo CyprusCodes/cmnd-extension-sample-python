@@ -65,8 +65,10 @@ tools = [
         "isDangerous": False,
         "functionType": "backend",
         "isLongRunningTool": False,
-        "prerequisites": [],
-        "rerun": "disabled"
+        "rerun": "disabled",
+        "prerequisites": []
+
+        
     },
     {
         "name": "put_username",
@@ -76,7 +78,7 @@ tools = [
         "isDangerous": False,
         "functionType": "backend",
         "isLongRunningTool": False,
-        "rerun": "allowedWithDifferentParameters",
+        "rerun": "allowed",
         "prerequisites": [],
 
     },
@@ -88,8 +90,7 @@ tools = [
         "isDangerous": False,
         "functionType": "backend",
         "isLongRunningTool": False,
-        "rerun": "allowed",
-        
-
+        "rerun": "allowedWithDifferentParams",
+        "prerequisites": [],
     }
 ]

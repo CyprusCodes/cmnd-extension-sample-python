@@ -22,10 +22,8 @@ def cmnd_tools_endpoint():
             "isDangerous": tool.get("isDangerous", False),
             "functionType": tool["functionType"],
             "isLongRunningTool": tool.get("isLongRunningTool", False),
-            "preCallPrompt": tool.get("preCallPrompt"),
             "postCallPrompt": tool.get("postCallPrompt"),
             "rerun": tool["rerun"],
-            "rerunWithDifferentParameters": tool["rerunWithDifferentParameters"],
             "prerequisites": tool.get("prerequisites"),
         } for tool in tools
     ]

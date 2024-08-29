@@ -11,6 +11,9 @@ class PutUsernameSchema(BaseModel):
 class EchoUsernameSchema(BaseModel):
     pass
 
+class SayHelloSchema(BaseModel):
+    pass
+
 
 # an example of a simple tool that returns the weather details of a city
 async def product_finder(product_name: str):
@@ -38,6 +41,8 @@ async def echo_username(memory:dict):
         "responseString": f"The username found in memory is {username}"
     }
 
+async def say_hello():
+    return "Hello World!"
 
 # DON'T TOUCH THIS FUNCTION FOR ANY REASON
 def custom_json_schema(model):
@@ -65,6 +70,7 @@ tools = [
         "isDangerous": False,
         "functionType": "backend",
         "isLongRunningTool": False,
+        "prerequisites": [],
         "rerun": "disabled"
     },
     {
@@ -75,8 +81,9 @@ tools = [
         "isDangerous": False,
         "functionType": "backend",
         "isLongRunningTool": False,
-        "rerun": True,
-        "rerunWithDifferentParameters": "allowedWithDifferentParameters"
+        "rerun": "allowed",
+        "prerequisites": [],
+
     },
     {
         "name": "echo_username",
@@ -86,8 +93,7 @@ tools = [
         "isDangerous": False,
         "functionType": "backend",
         "isLongRunningTool": False,
-        "rerun": False,
-        "rerunWithDifferentParameters": "allowed"
-
+        "rerun": "allowedWithDifferentParams",
+        "prerequisites": [],
     }
 ]
