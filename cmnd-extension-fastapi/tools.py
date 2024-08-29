@@ -65,9 +65,7 @@ tools = [
         "isDangerous": False,
         "functionType": "backend",
         "isLongRunningTool": False,
-        "rerun": False,
-        "rerunWithDifferentParameters": False,
-        "prerequisites": []
+        "rerun": "disabled"
     },
     {
         "name": "put_username",
@@ -78,8 +76,7 @@ tools = [
         "functionType": "backend",
         "isLongRunningTool": False,
         "rerun": True,
-        "rerunWithDifferentParameters": True,
-        "prerequisites": ['product_finder']
+        "rerunWithDifferentParameters": "allowedWithDifferentParameters"
     },
     {
         "name": "echo_username",
@@ -90,8 +87,7 @@ tools = [
         "functionType": "backend",
         "isLongRunningTool": False,
         "rerun": False,
-        "rerunWithDifferentParameters": False,
-        "prerequisites": ['product_finder', 'put_username']
+        "rerunWithDifferentParameters": "allowed"
 
     }
 ]

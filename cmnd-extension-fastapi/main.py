@@ -23,9 +23,8 @@ def cmnd_tools_endpoint():
             "isLongRunningTool": tool.get("isLongRunningTool", False),
             "preCallPrompt": tool.get("preCallPrompt"),
             "postCallPrompt": tool.get("postCallPrompt"),
-            "rerun": tool["rerun"],
-            "rerunWithDifferentParameters": tool["rerunWithDifferentParameters"],
-            "prerequisites": tool["prerequisites"]
+            "prerequisites": tool.get("prerequisites"),
+            "rerun": tool["rerun"]
         } for tool in tools
     ]
     return JSONResponse(content={"tools": tools_response})
