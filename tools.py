@@ -1,4 +1,3 @@
-import os
 from pydantic import BaseModel, Field
 import httpx
 
@@ -10,10 +9,6 @@ class PutUsernameSchema(BaseModel):
 
 class EchoUsernameSchema(BaseModel):
     pass
-
-class SayHelloSchema(BaseModel):
-    pass
-
 
 # an example of a simple tool that returns the weather details of a city
 async def product_finder(product_name: str):
@@ -40,9 +35,6 @@ async def echo_username(memory:dict):
     return {
         "responseString": f"The username found in memory is {username}"
     }
-
-async def say_hello():
-    return "Hello World!"
 
 # DON'T TOUCH THIS FUNCTION FOR ANY REASON
 def custom_json_schema(model):
