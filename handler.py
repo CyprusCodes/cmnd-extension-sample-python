@@ -66,6 +66,7 @@ def run_cmnd_tool(event, context):
 
         conversation_id = props.pop("conversationId", None)
         chatbot_conversation_id = props.pop("chatbotConversationId", None)
+        organization_id = props.pop("organizationId", None)
 
         run_cmd_params = signature(tool["runCmd"]).parameters
 
