@@ -3,6 +3,18 @@ import asyncio
 from inspect import signature
 from tools import tools
 
+# Values CMND adds to every tool call. They are not tool arguments, so they are
+# handed over as `context` to any runCmd that takes it.
+# senderPhoneNumber is the WhatsApp sender's phone, or None when it is unknown.
+CONTEXT_KEYS = [
+    "conversationId",
+    "chatbotConversationId",
+    "chatbotConversationRef",
+    "chatbotId",
+    "organizationId",
+    "senderPhoneNumber",
+]
+
 def handler(event, context):
     try:
         path = event.get('path')
@@ -64,16 +76,16 @@ def run_cmnd_tool(event, context):
                 "headers": {"Content-Type": "application/json"}
             }
 
-        conversation_id = props.pop("conversationId", None)
-        chatbot_conversation_id = props.pop("chatbotConversationId", None)
-        organization_id = props.pop("organizationId", None)
+        cmnd_context = {key: props.pop(key, None) for key in CONTEXT_KEYS}
 
         run_cmd_params = signature(tool["runCmd"]).parameters
 
         if 'memory' in run_cmd_params:
-            result = asyncio.run(tool["runCmd"](**props, memory=memory))
-        else:
-            result = asyncio.run(tool["runCmd"](**props))
+            props["memory"] = memory
+        if 'context' in run_cmd_params:
+            props["context"] = cmnd_context
+
+        result = asyncio.run(tool["runCmd"](**props))
         
         return {
             "statusCode": 200,
