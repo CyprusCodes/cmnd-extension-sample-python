@@ -10,6 +10,9 @@ class PutUsernameSchema(BaseModel):
 class EchoUsernameSchema(BaseModel):
     pass
 
+class GetPhoneNumberSchema(BaseModel):
+    pass
+
 # an example of a simple tool that returns the weather details of a city
 async def product_finder(product_name: str):
     url = f"https://dummyjson.com/products/search?q={product_name}"
@@ -34,6 +37,19 @@ async def echo_username(memory:dict):
         }
     return {
         "responseString": f"The username found in memory is {username}"
+    }
+
+# an example of a tool that uses the context CMND passes to every tool call
+# senderPhoneNumber is only set on WhatsApp; turn on "require phone number" on the
+# chatbot so it is always known
+async def get_phone_number(context: dict):
+    phone_number = context.get('senderPhoneNumber')
+    if not phone_number:
+        return {
+            "responseString": "The user's phone number is not available"
+        }
+    return {
+        "responseString": f"The user's phone number is {phone_number}"
     }
 
 # DON'T TOUCH THIS FUNCTION FOR ANY REASON
@@ -86,6 +102,17 @@ tools = [
         "functionType": "backend",
         "isLongRunningTool": False,
         "rerun": "allowedWithDifferentParams",
+        "prerequisites": [],
+    },
+    {
+        "name": "get_phone_number",
+        "description": "gets the phone number of the user the assistant is talking to",
+        "parameters": custom_json_schema(GetPhoneNumberSchema),
+        "runCmd": get_phone_number,
+        "isDangerous": False,
+        "functionType": "backend",
+        "isLongRunningTool": False,
+        "rerun": "allowed",
         "prerequisites": [],
     }
 ]
